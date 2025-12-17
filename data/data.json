@@ -1,0 +1,236 @@
+{
+  "activities": [
+    {
+      "id": "e9990077-a2c5-4bf6-ab18-04f966f0e555",
+      "title": "cablage",
+      "description": "",
+      "date": "2025-11-20",
+      "category": "reseau"
+    }
+  ],
+  "students": [
+    {
+      "id": "d1a27052-744b-444c-a2a3-2c3a593c0821",
+      "firstName": "hhh",
+      "lastName": "hhh",
+      "email": "hhh@gmsk.com",
+      "classroom": "hhh",
+      "filiere": "hhh",
+      "semestre": "",
+      "universite": ""
+    },
+    {
+      "id": "214844a6-e9cc-4b5e-a966-c373c839b672",
+      "firstName": "dd",
+      "lastName": "dd",
+      "email": "dd@ads.com",
+      "classroom": "caccdae",
+      "filiere": "caccdae",
+      "semestre": "",
+      "universite": ""
+    },
+    {
+      "id": "1cfa4a8b-02c7-4593-8b86-19d43924a8d5",
+      "firstName": "hhhh",
+      "lastName": "ddddd",
+      "email": "hhh@gmail.com",
+      "classroom": "www"
+    },
+    {
+      "id": "11d91add-4558-42ab-b34e-07ca303897a5",
+      "firstName": "gha",
+      "lastName": "j",
+      "email": "n@gmail.com",
+      "classroom": "",
+      "filiere": "",
+      "ecole": "",
+      "password": "12345"
+    },
+    {
+      "id": "b36a372d-3a62-4ebf-b8fc-e071cd9432ee",
+      "firstName": "gha",
+      "lastName": "ghj",
+      "email": "r@gmail.com",
+      "classroom": "www"
+    },
+    {
+      "id": "831e46d2-76fa-4436-83cf-d2ff13fb11d5",
+      "firstName": "RABAB",
+      "lastName": "kk",
+      "email": "rj@gmail.com",
+      "classroom": "ddd",
+      "filiere": "",
+      "ecole": "",
+      "password": "123456"
+    },
+    {
+      "id": "f6ba546d-b469-451a-b7aa-eb3e280e09aa",
+      "firstName": "dd",
+      "lastName": "ss",
+      "email": "ff@gmail.com",
+      "classroom": "",
+      "filiere": "ss",
+      "ecole": "ff"
+    },
+    {
+      "id": "abd79727-d16a-4d5c-9dfd-66d60d1ea11d",
+      "firstName": "aaaa",
+      "lastName": "bbbb",
+      "email": "aaa@gmail.com",
+      "classroom": "",
+      "filiere": "fff",
+      "ecole": "",
+      "password": "1234"
+    },
+    {
+      "id": "dc9ec348-e254-4fe1-a6ad-fdadc569e56c",
+      "firstName": "rabab",
+      "lastName": "rabab",
+      "email": "rabab@gmail.com",
+      "classroom": "",
+      "filiere": "AI",
+      "ecole": "",
+      "password": "12345"
+    },
+    {
+      "id": "5410ddae-1e84-4830-8b22-6cc5029c2e85",
+      "firstName": "adfkjlaj",
+      "lastName": "afskldfja",
+      "email": "aaaa@gmail.com",
+      "classroom": "",
+      "filiere": "ai",
+      "ecole": "est"
+    },
+    {
+      "id": "56374e84-1a3c-470c-93d9-22b491cd49fc",
+      "firstName": "mehdi",
+      "lastName": "mehdi",
+      "email": "mehdi@gmail.com",
+      "classroom": "",
+      "filiere": "ai",
+      "ecole": "est",
+      "password": "123456"
+    }
+  ],
+  "registrations": [
+    {
+      "id": "2b922f81-0c98-472c-9694-71c49c867335",
+      "activityId": "e9990077-a2c5-4bf6-ab18-04f966f0e555",
+      "studentId": "56374e84-1a3c-470c-93d9-22b491cd49fc",
+      "createdAt": "2025-12-17T10:26:20.174Z"
+    }
+  ],
+  "clubs": [
+    {
+      "id": "168f20ab-45b7-4248-85df-6c04c99c60ec",
+      "name": "Robotique"
+    },
+    {
+      "id": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "name": "IA"
+    },
+    {
+      "id": "3df1622a-8f14-42e1-be69-78e812d15acf",
+      "name": "Theatre"
+    },
+    {
+      "id": "c87c8f80-4a69-4d01-9e68-09032342115d",
+      "name": "Musique"
+    },
+    {
+      "id": "b826d50f-02a5-4702-a560-f272a36797f9",
+      "name": "reseau"
+    }
+  ],
+  "clubMemberships": [
+    {
+      "id": "f279f035-2e0d-4055-8d0d-8ff963693a0f",
+      "clubId": "168f20ab-45b7-4248-85df-6c04c99c60ec",
+      "studentId": "214844a6-e9cc-4b5e-a966-c373c839b672",
+      "createdAt": "2025-11-21T14:50:50.147Z"
+    },
+    {
+      "id": "1a53fac7-41ad-47ff-82ca-745a634c84c2",
+      "clubId": "168f20ab-45b7-4248-85df-6c04c99c60ec",
+      "studentId": "1cfa4a8b-02c7-4593-8b86-19d43924a8d5",
+      "createdAt": "2025-11-23T11:39:00.581Z"
+    },
+    {
+      "id": "7e507b9a-d3a8-4977-a731-9d65d8eac4c8",
+      "clubId": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "studentId": "11d91add-4558-42ab-b34e-07ca303897a5",
+      "createdAt": "2025-11-23T12:01:10.016Z"
+    },
+    {
+      "id": "2cff1b13-0896-4f0a-8653-9823f93c0ba1",
+      "clubId": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "studentId": "b36a372d-3a62-4ebf-b8fc-e071cd9432ee",
+      "createdAt": "2025-11-23T12:12:50.053Z"
+    },
+    {
+      "id": "3600d4f4-c526-4d4e-988d-f5894c40c0c0",
+      "clubId": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "studentId": "831e46d2-76fa-4436-83cf-d2ff13fb11d5",
+      "createdAt": "2025-11-23T12:13:36.596Z"
+    },
+    {
+      "id": "29181547-48cf-42c6-90a7-b42e566ee23d",
+      "clubId": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "studentId": "abd79727-d16a-4d5c-9dfd-66d60d1ea11d",
+      "createdAt": "2025-11-25T15:48:15.867Z"
+    },
+    {
+      "id": "4dea1b68-09a6-4d19-9d61-9842905a3f8c",
+      "clubId": "3df1622a-8f14-42e1-be69-78e812d15acf",
+      "studentId": "dc9ec348-e254-4fe1-a6ad-fdadc569e56c",
+      "createdAt": "2025-11-25T16:40:02.336Z"
+    },
+    {
+      "id": "71ed1792-d3d4-4e76-848e-d39bce5d5948",
+      "clubId": "168f20ab-45b7-4248-85df-6c04c99c60ec",
+      "studentId": "5410ddae-1e84-4830-8b22-6cc5029c2e85",
+      "createdAt": "2025-11-27T16:03:50.277Z"
+    },
+    {
+      "id": "1f2f2a35-3d31-44b5-9124-296b3be3a875",
+      "clubId": "c4a9e8b9-8764-4fac-a19b-b8c97269f822",
+      "studentId": "56374e84-1a3c-470c-93d9-22b491cd49fc",
+      "createdAt": "2025-12-17T10:25:17.228Z"
+    }
+  ],
+  "admins": [
+    {
+      "id": "b3d4dc8e-40d8-4581-b33f-69cadbe34bc2",
+      "username": "noura",
+      "password": "12345"
+    },
+    {
+      "id": "ae24d53e-44ea-414f-b752-dd49f316331f",
+      "firstName": "elmehdi",
+      "lastName": "barrouchi",
+      "email": "mehdi@gmail.com",
+      "ecole": "EST",
+      "filiere": "AI",
+      "username": "mehdi",
+      "password": "12345"
+    },
+    {
+      "id": "e40fefb2-c7e1-40d5-8cc2-6f6601c5b57d",
+      "firstName": "mehdi",
+      "lastName": "mehdi",
+      "email": "emehdi@gmail.com",
+      "ecole": "est",
+      "filiere": "ai",
+      "username": "mehdi",
+      "password": "12345"
+    }
+  ],
+  "clubAdmins": [
+    {
+      "id": "d4ffa31c-6415-4427-869e-130304b78999",
+      "clubId": "168f20ab-45b7-4248-85df-6c04c99c60ec",
+      "username": "noura",
+      "password": "12345"
+    }
+  ]
+}

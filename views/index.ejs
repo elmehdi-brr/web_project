@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Clubs ESTT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="brand">
+        <img src="/img/logo-est.png" alt="Logo EST de Tétouan" class="brand-logo" />
+        <div class="brand-text">
+          <span class="brand-title">CLUBS ESTT</span>
+          <span class="brand-subtitle">Clubs de l'École Supérieure de Technologie de Tétouan</span>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <a href="#intro" class="nav-link">Accueil</a>
+        <a href="#clubs" class="nav-link">Clubs</a>
+        <a href="#activities" class="nav-link">Activités</a>
+        <% if (isAdmin) { %>
+          <a href="/admin" class="nav-link">Espace admin</a>
+          <form action="/admin/logout" method="post" class="inline-form">
+            <button type="submit" class="button button--ghost">Déconnexion</button>
+          </form>
+        <% } else { %>
+          <a href="/admin/login" class="nav-link">Espace administrateur</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1) Section d'introduction / bienvenue -->
+    <section class="hero hero--home" id="intro">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <p class="hero-kicker">Vie associative</p>
+          <h1>Bienvenue dans les clubs de l'École Supérieure de Technologie</h1>
+          <p class="hero-subtitle">
+            Découvrez nos différents espaces, développez vos compétences et participez à des
+            activités enrichissantes au sein de notre établissement.
+          </p>
+          <div class="hero-actions">
+            <a href="#clubs" class="button button--primary">Rejoindre un club</a>
+            <a href="#activities" class="button button--ghost">Voir les activités</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <p class="hero-panel-title">Une communauté dynamique</p>
+          <p class="hero-panel-text">
+            Les clubs de l'ESTT rassemblent des étudiantes et étudiants motivés autour de
+            projets concrets et d'activités variées tout au long de l'année universitaire.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Section : Rejoindre un club -->
+    <section class="section" id="clubs">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Rejoindre un club</h2>
+            <p class="muted">
+              Choisissez le club qui correspond à vos centres d'intérêt et impliquez-vous dans la vie de l'école.
+            </p>
+          </div>
+        </div>
+
+        <% if (!clubs || clubs.length === 0) { %>
+          <div class="empty-state">
+            <h3>Aucun club défini</h3>
+            <p class="muted">Les clubs pourront être créés et gérés depuis l'espace administrateur.</p>
+          </div>
+        <% } else { %>
+          <form action="/clubs/join" method="post" class="form">
+            <div class="form-row">
+              <label for="clubId">Club</label>
+              <select id="clubId" name="clubId">
+                <% clubs.forEach(function(club) { %>
+                  <option value="<%= club.id %>"><%= club.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="firstName">Prénom</label>
+              <input type="text" id="firstName" name="firstName" required />
+            </div>
+            <div class="form-row">
+              <label for="lastName">Nom</label>
+              <input type="text" id="lastName" name="lastName" required />
+            </div>
+            <div class="form-row">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-row">
+              <label for="filiere">Filière</label>
+              <input type="text" id="filiere" name="filiere" />
+            </div>
+            <div class="form-row">
+              <label for="ecole">École</label>
+              <input type="text" id="ecole" name="ecole" />
+            </div>
+            <div class="form-row">
+              <button type="submit" class="button button--primary">Valider l'inscription au club</button>
+            </div>
+          </form>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- 3) Section : Activités disponibles -->
+    <section class="section" id="activities">
+      <div class="container">
+        <% if (flash) { %>
+          <div class="flash"><%= flash %></div>
+        <% } %>
+
+        <div class="section-header">
+          <div>
+            <h2>Activités disponibles</h2>
+            <p class="muted">
+              Consultez les activités proposées par nos clubs et participez aux événements organisés sur le campus.
+            </p>
+          </div>
+          <form method="get" class="filter-bar">
+            <label for="category">Catégorie</label>
+            <select name="category" id="category" onchange="this.form.submit()">
+              <option value="">Toutes</option>
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+            <noscript>
+              <button type="submit" class="button button--primary">Filtrer</button>
+            </noscript>
+          </form>
+        </div>
+
+        <% if (activities.length === 0) { %>
+          <div class="empty-state">
+            <h3>Aucune activité pour le moment</h3>
+            <p class="muted">
+              De nouvelles activités pourront être publiées prochainement par les responsables des clubs.
+            </p>
+          </div>
+        <% } else { %>
+          <div class="cards">
+            <% activities.forEach(function(activity) { %>
+              <article class="card card--activity">
+                <header class="card-header">
+                  <h3>
+                    <a href="/activities/<%= activity.id %>"><%= activity.title %></a>
+                  </h3>
+                  <% if (activity.category) { %>
+                    <span class="badge"><%= activity.category %></span>
+                  <% } %>
+                </header>
+                <% if (activity.date) { %>
+                  <p class="muted small">Date : <%= activity.date %></p>
+                <% } %>
+                <p class="card-description"><%= activity.description %></p>
+                <footer class="card-footer">
+                  <a href="/activities/<%= activity.id %>" class="button button--secondary">
+                    Voir les détails de l'activité
+                  </a>
+                </footer>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Clubs ESTT  Université Abdelmalek Essaâdi</p>
+    </div>
+  </footer>
+</body>
+</html>

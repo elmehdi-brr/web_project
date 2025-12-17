@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Admin  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Étudiants</h1>
+          <p class="muted">Ajouter et gérer les comptes étudiants.</p>
+        </div>
+      </div>
+
+      <section class="card" style="margin-bottom:1.5rem;">
+        <h2>Ajouter un étudiant</h2>
+        <form action="/admin/students" method="post" class="form">
+          <div class="form-row">
+            <label for="firstName">Prénom</label>
+            <input type="text" id="firstName" name="firstName" />
+          </div>
+          <div class="form-row">
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" />
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div class="form-row">
+            <label for="filiere">Filière</label>
+            <input type="text" id="filiere" name="filiere" />
+          </div>
+          <div class="form-row">
+            <label for="ecole">École</label>
+            <input type="text" id="ecole" name="ecole" />
+          </div>
+          <div class="form-row">
+            <label for="clubId">Club</label>
+            <select id="clubId" name="clubId">
+              <option value="">Aucun club</option>
+              <% clubs.forEach(function(club) { %>
+                <option value="<%= club.id %>"><%= club.name %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="button button--primary">Ajouter</button>
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h2>Liste des étudiants</h2>
+        <% if (students.length === 0) { %>
+          <div class="empty-state">
+            <h3>Aucun étudiant</h3>
+            <p class="muted">Les étudiants apparaîtront ici après leur création ou inscription.</p>
+          </div>
+        <% } else { %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Filière</th>
+                <th>École</th>
+                <th>Club</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% students.forEach(function(student) { %>
+                <tr>
+                  <td><%= student.lastName %></td>
+                  <td><%= student.firstName %></td>
+                  <td><%= student.email %></td>
+                  <td><%= student.filiere %></td>
+                  <td><%= student.ecole %></td>
+                  <td><%= student.clubsLabel %></td>
+                  <td class="table-actions">
+                    <form action="/admin/students/<%= student.id %>/delete" method="post" class="inline-form">
+                      <button type="submit" class="button button--danger small" onclick="return confirm('Supprimer cet etudiant ?');">Supprimer</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

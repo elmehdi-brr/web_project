@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %> | Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Accueil</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Authentification du club</h1>
+          <p class="muted">Connectez-vous ou créez un compte pour un club.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <section class="card">
+          <h2>Connexion</h2>
+          <form action="/auth-club/login" method="post" class="form">
+            <div class="form-row">
+              <label for="loginClubId">Club</label>
+              <select id="loginClubId" name="clubId">
+                <option value="">Sélectionner un club</option>
+                <% clubs.forEach(function(club) { %>
+                  <option value="<%= club.id %>"><%= club.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="loginEmail">Email</label>
+              <input type="email" id="loginEmail" name="email" />
+            </div>
+            <div class="form-row">
+              <label for="loginPassword">Mot de passe</label>
+              <input type="password" id="loginPassword" name="password" />
+            </div>
+            <% if (loginError) { %>
+              <p class="error-inline"><%= loginError %></p>
+            <% } %>
+            <div class="form-row">
+              <button type="submit" class="button button--primary">Se connecter</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Créer un compte</h2>
+          <form action="/auth-club/register" method="post" class="form">
+            <div class="form-row">
+              <label for="registerClubId">Club</label>
+              <select id="registerClubId" name="clubId">
+                <option value="">Sélectionner un club</option>
+                <% clubs.forEach(function(club) { %>
+                  <option value="<%= club.id %>"><%= club.name %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="firstName">Prénom</label>
+              <input type="text" id="firstName" name="firstName" />
+            </div>
+            <div class="form-row">
+              <label for="lastName">Nom</label>
+              <input type="text" id="lastName" name="lastName" />
+            </div>
+            <div class="form-row">
+              <label for="registerEmail">Email</label>
+              <input type="email" id="registerEmail" name="email" />
+            </div>
+            <div class="form-row">
+              <label for="registerFiliere">Filière</label>
+              <input type="text" id="registerFiliere" name="filiere" />
+            </div>
+            <div class="form-row">
+              <label for="registerPassword">Mot de passe</label>
+              <input type="password" id="registerPassword" name="password" />
+            </div>
+            <div class="form-row">
+              <label for="confirmPassword">Confirmer le mot de passe</label>
+              <input type="password" id="confirmPassword" name="confirmPassword" />
+            </div>
+            <% if (registerError) { %>
+              <p class="error-inline"><%= registerError %></p>
+            <% } %>
+            <div class="form-row">
+              <button type="submit" class="button button--primary">Créer un compte</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <p class="muted small" style="margin-top:1.5rem; text-align:center;">
+        <a href="/admin/clubs" class="nav-link">&larr; Revenir à la page « Clubs »</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

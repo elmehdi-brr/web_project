@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Activites</a>
+        <% if (isAdmin) { %>
+          <a href="/admin" class="nav-link">Espace admin</a>
+          <form action="/admin/logout" method="post" class="inline-form">
+            <button type="submit" class="button button--ghost">Deconnexion</button>
+          </form>
+        <% } else { %>
+          <a href="/admin/login" class="nav-link">Espace administrateur</a>
+        <% } %>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <a href="/" class="nav-link small" style="display:inline-block;margin-bottom:0.75rem;"> Retour aux activites</a>
+
+      <section class="card" style="margin-bottom:1.5rem;">
+        <h1><%= activity.title %></h1>
+        <% if (activity.date) { %>
+          <p class="muted small">Date : <%= activity.date %></p>
+        <% } %>
+        <% if (activity.category) { %>
+          <p class="badge" style="margin-top:0.4rem;"><%= activity.category %></p>
+        <% } %>
+        <p class="card-description" style="margin-top:0.8rem;"><%= activity.description %></p>
+      </section>
+
+      <section class="card">
+        <h2>S'inscrire a cette activite</h2>
+
+        <% if (errors && errors.length > 0) { %>
+          <ul class="errors">
+            <% errors.forEach(function(error) { %>
+              <li><%= error %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+
+        <form action="/activities/<%= activity.id %>/register" method="post" class="form">
+          <div class="form-row">
+            <label for="firstName">Prenom</label>
+            <input type="text" id="firstName" name="firstName" value="<%= formData.firstName %>" />
+          </div>
+          <div class="form-row">
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" value="<%= formData.lastName %>" />
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="<%= formData.email %>" />
+          </div>
+          <div class="form-row">
+            <label for="filiere">Filière</label>
+            <input type="text" id="filiere" name="filiere" value="<%= formData.filiere %>" />
+          </div>
+          <div class="form-row">
+            <label for="ecole">École</label>
+            <input type="text" id="ecole" name="ecole" value="<%= formData.ecole %>" />
+          </div>
+          <div class="form-row">
+            <button type="submit" class="button button--primary">Valider l'inscription</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin du club  Admin  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <section class="card" style="max-width:520px;margin:2rem auto;">
+        <h1>Compte administrateur du club <%= club.name %></h1>
+        <p class="muted small">
+          Definissez les identifiants du responsable de ce club. Cet admin
+          pourra se connecter via une page dediee au club.
+        </p>
+
+        <form action="/admin/clubs/<%= club.id %>/admin" method="post" class="form">
+          <div class="form-row">
+            <label for="username">Identifiant</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value="<%= clubAdmin ? clubAdmin.username : '' %>"
+            />
+          </div>
+          <div class="form-row">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" />
+          </div>
+          <div class="form-row">
+            <label for="confirmPassword">Confirmer le mot de passe</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" />
+          </div>
+          <% if (error) { %>
+            <p class="error-inline"><%= error %></p>
+          <% } %>
+          <div class="form-row">
+            <button type="submit" class="button button--primary">Enregistrer</button>
+            <a href="/admin/clubs" class="button button--secondary">Annuler</a>
+          </div>
+        </form>
+
+        <div class="muted small" style="margin-top:1rem;">
+          <p>URL de connexion pour ce club :</p>
+          <code>/clubs/<%= club.id %>/admin/login</code>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

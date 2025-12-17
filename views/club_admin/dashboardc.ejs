@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  <%= club.name %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <span class="nav-link">Admin club : <strong><%= club.name %></strong></span>
+        <form action="/club-admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Tableau de bord du club <%= club.name %></h1>
+          <p class="muted">Vue d'ensemble des activites et des membres de ce club.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <h2>Activites du club</h2>
+          <p class="stat-number"><%= stats.activitiesCount %></p>
+        </article>
+
+        <article class="card">
+          <h2>Membres du club</h2>
+          <p class="stat-number"><%= stats.membersCount %></p>
+        </article>
+      </div>
+
+      <section style="margin-top:2rem;">
+        <h2>Liste des activites</h2>
+        <% if (activities.length === 0) { %>
+          <div class="empty-state">
+            <h3>Aucune activite</h3>
+            <p class="muted">Aucune activite n'est encore associee a ce club.</p>
+          </div>
+        <% } else { %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% activities.forEach(function(activity) { %>
+                <tr>
+                  <td><%= activity.title %></td>
+                  <td><%= activity.description %></td>
+                  <td><%= activity.date || '-' %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+
+      <section style="margin-top:2rem;">
+        <h2>Membres du club</h2>
+        <% if (membersItems.length === 0) { %>
+          <div class="empty-state">
+            <h3>Aucun membre</h3>
+            <p class="muted">Aucun etudiant n'est encore inscrit a ce club.</p>
+          </div>
+        <% } else { %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Prenom</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Filiere</th>
+                <th>Ecole</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% membersItems.forEach(function(item) { %>
+                <tr>
+                  <td><%= item.student.firstName %></td>
+                  <td><%= item.student.lastName %></td>
+                  <td><%= item.student.email %></td>
+                  <td><%= item.student.filiere || '-' %></td>
+                  <td><%= item.student.ecole || '-' %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

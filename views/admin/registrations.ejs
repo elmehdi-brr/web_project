@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Admin  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Inscriptions aux activites</h1>
+          <p class="muted">Liste des inscriptions des etudiants aux activites.</p>
+        </div>
+      </div>
+
+      <% if (items.length === 0) { %>
+        <div class="empty-state">
+          <h3>Aucune inscription</h3>
+          <p class="muted">Les inscriptions apparaitront ici lorsque les etudiants s'inscrivent.</p>
+        </div>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Activite</th>
+              <th>Etudiant</th>
+              <th>Email</th>
+              <th>Filiere</th>
+              <th>Ecole</th>
+              <th>Date d'inscription</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% items.forEach(function(item) { %>
+              <tr>
+                <td><%= item.activity.title %></td>
+                <td><%= item.student.firstName %> <%= item.student.lastName %></td>
+                <td><%= item.student.email %></td>
+                <td><%= item.student.filiere || '' %></td>
+                <td><%= item.student.ecole || '' %></td>
+                <td><%= item.registration.createdAt %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

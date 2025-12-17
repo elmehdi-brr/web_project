@@ -1,0 +1,18 @@
+﻿{
+  "name": "club-scolaire",
+  "version": "1.0.0",
+  "description": "Application web de gestion des activites d'un club scolaire (robotique, IA, theatre, etc.)",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.19.0",
+    "express-session": "^1.17.3",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}

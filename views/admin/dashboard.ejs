@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Admin  Clubs scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Clubs scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Tableau de bord</h1>
+          <p class="muted">Vue d'ensemble des activites, etudiants et clubs.</p>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <h2>Activites</h2>
+          <p class="stat-number"><%= stats.activitiesCount %></p>
+          <p class="muted">activites configurees</p>
+          <p><a href="/admin/activities" class="nav-link">Gerer les activites</a></p>
+        </article>
+
+        <article class="card">
+          <h2>Etudiants</h2>
+          <p class="stat-number"><%= stats.studentsCount %></p>
+          <p class="muted">comptes etudiants</p>
+          <p><a href="/admin/students" class="nav-link">Gerer les etudiants</a></p>
+        </article>
+
+        <article class="card">
+          <h2>Inscriptions activites</h2>
+          <p class="stat-number"><%= stats.registrationsCount %></p>
+          <p class="muted">inscriptions enregistrees</p>
+          <p><a href="/admin/registrations" class="nav-link">Voir les inscriptions</a></p>
+        </article>
+
+        <article class="card">
+          <h2>Clubs</h2>
+          <p class="stat-number"><%= stats.clubsCount %></p>
+          <p class="muted">clubs disponibles</p>
+          <p><a href="/admin/clubs" class="nav-link">Gerer les clubs</a></p>
+        </article>
+
+        <article class="card">
+          <h2>Membres de clubs</h2>
+          <p class="stat-number"><%= stats.clubMembershipsCount %></p>
+          <p class="muted">inscriptions aux clubs</p>
+          <p><a href="/admin/club-memberships" class="nav-link">Voir les membres</a></p>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Clubs scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

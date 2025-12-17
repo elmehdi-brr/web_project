@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Admin  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <div class="section-header">
+        <div>
+          <h1>Activites</h1>
+          <p class="muted">Creer, modifier ou supprimer les activites du club scolaire.</p>
+        </div>
+        <a href="/admin/activities/new" class="button button--primary">Nouvelle activite</a>
+      </div>
+
+      <% if (activities.length === 0) { %>
+        <div class="empty-state">
+          <h3>Aucune activite</h3>
+          <p class="muted">Creez une premiere activite pour lancer le club.</p>
+        </div>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Titre</th>
+              <th>Date</th>
+              <th>Categorie</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% activities.forEach(function(activity) { %>
+              <tr>
+                <td><%= activity.title %></td>
+                <td><%= activity.date %></td>
+                <td><%= activity.category %></td>
+                <td class="table-actions">
+                  <a href="/activities/<%= activity.id %>" class="button button--secondary small">Voir</a>
+                  <a href="/admin/activities/<%= activity.id %>/edit" class="button button--secondary small">Modifier</a>
+                  <form action="/admin/activities/<%= activity.id %>/delete" method="post" class="inline-form">
+                    <button type="submit" class="button button--danger small" onclick="return confirm('Supprimer cette activite ?');">Supprimer</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

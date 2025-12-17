@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Creation du compte administrateur  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/" class="nav-link">Accueil</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <section class="card" style="max-width:480px;margin:2rem auto;">
+        <h1>Créer le compte administrateur</h1>
+        <p class="muted small" style="margin-bottom:0.75rem;">
+          Cette étape est à faire une seule fois. Choisissez un identifiant et un mot de passe
+          pour l'administrateur principal de l'application.
+        </p>
+        <% if (error) { %>
+          <p class="error-inline"><%= error %></p>
+        <% } %>
+        <form action="/admin/setup" method="post" class="form">
+          <div class="form-row">
+            <label for="firstName">Prénom</label>
+            <input type="text" id="firstName" name="firstName" />
+          </div>
+          <div class="form-row">
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" />
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div class="form-row">
+            <label for="ecole">École</label>
+            <input type="text" id="ecole" name="ecole" />
+          </div>
+          <div class="form-row">
+            <label for="filiere">Filière</label>
+            <input type="text" id="filiere" name="filiere" />
+          </div>
+          <div class="form-row">
+            <label for="username">Identifiant</label>
+            <input type="text" id="username" name="username" />
+          </div>
+          <div class="form-row">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" />
+          </div>
+          <div class="form-row">
+            <label for="confirmPassword">Confirmer le mot de passe</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" />
+          </div>
+          <div class="form-row">
+            <button type="submit" class="button button--primary">Créer le compte</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= pageTitle %>  Admin  Club scolaire</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo">Club scolaire</a>
+      <nav class="main-nav">
+        <a href="/admin" class="nav-link">Tableau de bord</a>
+        <a href="/admin/activities" class="nav-link">Activites</a>
+        <a href="/admin/students" class="nav-link">Etudiants</a>
+        <a href="/admin/registrations" class="nav-link">Inscriptions</a>
+        <a href="/admin/clubs" class="nav-link">Clubs</a>
+        <a href="/admin/club-memberships" class="nav-link">Membres clubs</a>
+        <form action="/admin/logout" method="post" class="inline-form">
+          <button type="submit" class="button button--ghost">Deconnexion</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <% if (flash) { %>
+        <div class="flash"><%= flash %></div>
+      <% } %>
+
+      <section class="card" style="margin-bottom:1.5rem;">
+        <h1><%= activity ? 'Modifier une activite' : 'Nouvelle activite' %></h1>
+        <form action="<%= formAction %>" method="post" class="form">
+          <div class="form-row">
+            <label for="title">Titre</label>
+            <input type="text" id="title" name="title" value="<%= activity ? activity.title : '' %>" />
+          </div>
+          <div class="form-row">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="4"><%= activity ? activity.description : '' %></textarea>
+          </div>
+          <div class="form-row">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" value="<%= activity ? activity.date : '' %>" />
+          </div>
+          <div class="form-row">
+            <label for="category">Categorie / Club</label>
+            <select id="category" name="category">
+              <option value="">Non specifiee</option>
+              <% categories.forEach(function(cat) { %>
+                <option value="<%= cat %>" <%= activity && activity.category === cat ? 'selected' : '' %>><%= cat %></option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="form-row">
+            <button type="submit" class="button button--primary">Enregistrer</button>
+            <a href="/admin/activities" class="button button--secondary">Annuler</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="muted"> <%= new Date().getFullYear() %> Club scolaire</p>
+    </div>
+  </footer>
+</body>
+</html>
