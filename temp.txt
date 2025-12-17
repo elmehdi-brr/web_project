@@ -1,0 +1,100 @@
+Half B – Auth, Sessions, Admin Areas (Student 2)
+------------------------------------------------
+
+1. Main idea
+Goal: Explain how admins/club admins log in, how sessions/roles work, and how admin/club admin pages are built.
+
+2. Files to focus on
+
+- app.js
+  Focus on:
+  - Session configuration with express-session.
+  - Middleware: requireAdmin, requireClubAdmin,
+    the middleware that sets res.locals
+    (isAdmin, isClubAdmin, clubs, categories, flash).
+  - Routes:
+    /admin/login, /admin/logout, /admin
+    /admin/activities, /admin/students,
+    /admin/registrations, /admin/clubs,
+    /admin/club-memberships
+    /club-admin/login, /club-admin, etc. (if present).
+
+- Views (admin)
+  - views/admin/dashboard.ejs
+  - Other key ones:
+    - views/admin/activities.ejs
+    - views/admin/activity_form.ejs
+    - views/admin/login.ejs
+    - (and similar)
+
+- Views (club admin)
+  - views/club_admin/dashboard.ejs
+  - views/club_admin/login.ejs
+
+- public/css/styles.css
+  Only sections used by admin:
+  - .table, .form, .flash, .stat-number, etc.
+
+
+3. Technologies you explain
+
+A) Backend framework & libraries
+- Express (routing & middleware, but focusing on advanced use).
+- express-session:
+  - What a session is.
+  - Options: secret, resave, saveUninitialized.
+  - How it stores:
+    - req.session.isAdmin
+    - req.session.isClubAdmin
+    - req.session.clubAdminClubId
+- uuid:
+  - Why we use it for IDs when creating clubs, activities, etc.
+
+B) Authentication & authorization
+- Login routes:
+  - How credentials are checked.
+  - On success -> set session flags.
+  - On logout -> destroy or clear session.
+- Middleware:
+  - requireAdmin:
+    - Checks req.session.isAdmin.
+    - Redirects to /admin/login otherwise.
+  - requireClubAdmin:
+    - Checks req.session.isClubAdmin and clubAdminClubId.
+    - Returns 403 if not allowed.
+- Role separation:
+  - Public user.
+  - Admin (all clubs).
+  - Club admin (only their club).
+
+C) Admin & club admin views (EJS)
+- admin/dashboard.ejs:
+  - Uses stats.activitiesCount, stats.studentsCount, etc.
+  - Admin navigation and cards.
+- Other templates:
+  - Listing tables (students, registrations, activities).
+  - Forms to create/edit activities, clubs, etc.
+- club_admin templates:
+  - Dashboard for a single club, showing only its activities/members.
+
+D) Shared UI & flash messages
+- res.locals middleware:
+  - Makes isAdmin, isClubAdmin, clubs, categories, flash
+    available in all views.
+- Flash messages:
+  - Saved in req.session.flash,
+    then displayed once in EJS, then removed.
+- CSS:
+  - Tables (.table).
+  - Forms (.form, .form-row).
+  - Flash box (.flash).
+  - Stats (.stat-number).
+
+
+4. How to present it (short plan)
+
+Step 1: Explain what a session is and show express-session setup in app.js.
+Step 2: Show requireAdmin / requireClubAdmin and explain protected routes.
+Step 3: Show admin routes and what each page manages (activities, students, clubs…).
+Step 4: Show admin/dashboard.ejs and one or two other admin EJS files (tables/forms).
+Step 5: Show flash messages and how CSS makes admin UI readable.
