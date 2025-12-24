@@ -9,18 +9,36 @@ const app = express();
 const DATA_FILE = path.join(__dirname, 'data', 'data.json');
 const DEFAULT_CATEGORIES = ['Robotique', 'IA', 'Theatre', 'Musique', 'Autre'];
 
+/**
+ * createEmptyData
+ * ----------------
+ * Creates and returns a default empty data structure.
+ * This function is used when the data file does not exist or cannot be read.
+ * It ensures that the application always has a valid structure to work with,
+ * preventing 'undefined' errors when accessing arrays like students, activities, etc.
+ */
 function createEmptyData() {
   return {
-    activities: [],
-    students: [],
-    registrations: [],
-    clubs: [],
-    clubMemberships: [],
-    admins: [],
-    clubAdmins: []
+    activities: [],      // List of all activities
+    students: [],        // List of all registered students
+    registrations: [],   // Links between students and activities
+    clubs: [],           // List of clubs (Robotique, IA, etc.)
+    clubMemberships: [], // Links between students and clubs
+    admins: [],          // List of global administrators
+    clubAdmins: []       // List of club-specific administrators
   };
 }
 
+/**
+ * loadData
+ * --------
+ * Reads the data.json file from the disk and parses it.
+ * If the file doesn't exist or is empty, it returns the default empty structure.
+ * It also performs a "sanity check" to ensure all expected arrays exist,
+ * initializing them to empty arrays if they are missing.
+ *
+ * Returns: The full data object.
+ */
 function loadData() {
   if (!fs.existsSync(DATA_FILE)) {
     return createEmptyData();
@@ -48,9 +66,19 @@ function loadData() {
   }
 }
 
+/**
+ * saveData
+ * --------
+ * Writes the current data object back to data.json.
+ * It first checks if the directory exists and creates it if necessary.
+ * Then it serializes the data to JSON with indentation (null, 2) for readability.
+ *
+ * @param {Object} data - The complete data object to save.
+ */
 function saveData(data) {
   const dir = path.dirname(DATA_FILE);
   if (!fs.existsSync(dir)) {
+    
     fs.mkdirSync(dir, { recursive: true });
   }
 
@@ -67,6 +95,13 @@ function saveData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(toSave, null, 2), 'utf8');
 }
 
+/**
+ * ensureInitialData
+ * -----------------
+ * Checked at server startup.
+ * Ensures that there are at least some default clubs created if the list is empty.
+ * This guarantees the application has its basic categories (Robotique, IA, etc.) ready.
+ */
 function ensureInitialData() {
   const data = loadData();
 
@@ -90,6 +125,15 @@ function ensureInitialData() {
   saveData(data);
 }
 
+/**
+ * getParticipantsForActivity
+ * --------------------------
+ * Helper function to retrieve all students registered for a specific activity.
+ *
+ * @param {Object} data - The full data object.
+ * @param {string} activityId - The ID of the activity to check.
+ * @returns {Array} - An array of objects, each containing { student, registration }.
+ */
 function getParticipantsForActivity(data, activityId) {
   const regs = data.registrations.filter(r => r.activityId === activityId);
   return regs
@@ -100,14 +144,37 @@ function getParticipantsForActivity(data, activityId) {
     .filter(p => p.student);
 }
 
+// Middleware to protect admin routes
+// Checks if the user has the 'isAdmin' flag in their session
+/**
+ * Middleware: requireAdmin
+ * ------------------------
+ * Protects routes that should only be accessible by a global administrator.
+ * It checks the `req.session.isAdmin` flag.
+ * If the user is not an admin:
+ * 1. It saves the original URL in `req.session.returnTo` so they can be redirected back after login.
+ * 2. It redirects them to the admin login page.
+ */
 function requireAdmin(req, res, next) {
   if (!req.session.isAdmin) {
+    // If not admin, save the URL they wanted to visit
     req.session.returnTo = req.originalUrl;
+    // Redirect to the admin login page
     return res.redirect('/admin/login');
   }
+  // If admin, proceed to the requested route
   return next();
 }
 
+// Middleware to protect club admin routes
+// Checks if the user is a club admin and has a specific club ID assigned
+/**
+ * Middleware: requireClubAdmin
+ * ----------------------------
+ * Protects routes for club administrators.
+ * It checks if `req.session.isClubAdmin` is true AND if they have a `clubAdminClubId` assigned.
+ * If not, it sends a 403 Forbidden response (access denied).
+ */
 function requireClubAdmin(req, res, next) {
   if (!req.session.isClubAdmin || !req.session.clubAdminClubId) {
     return res.status(403).send('Acces reserve a ladministrateur du club.');
@@ -122,15 +189,35 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+// Configure the session middleware
+// express-session handles creating a session ID and storing it in a cookie.
+// The session data itself (like isAdmin, flash messages) is stored on the server (in memory by default).
 app.use(
   session({
+    // Secret used to sign the session ID cookie (encrypt/validate it).
+    // In a real production app, this should be a long, random string from environment variables.
     secret: process.env.SESSION_SECRET || 'change_this_secret',
+
+    // resave: false -> Do not save the session back to the store if it wasn't modified.
+    // This improves performance and reduces race conditions.
     resave: false,
+
+    // saveUninitialized: false -> Do not create a session until something is actually stored.
+    // This is good for GDPR compliance (no cookie set until necessary) and saves storage.
     saveUninitialized: false
   })
 );
 
+/**
+ * Global Middleware for View Variables (res.locals)
+ * -------------------------------------------------
+ * This middleware runs for EVERY request.
+ * It sets variables in `res.locals`, making them directly available in ALL EJS templates.
+ * This avoids having to pass these common variables (like `isAdmin`, `clubs`, `flash`) 
+ * manually in every `res.render` call.
+ */
 app.use((req, res, next) => {
+  // Make 'isAdmin' available in all views (true/false)
   res.locals.isAdmin = !!req.session.isAdmin;
 
   const dataForLocals = loadData();
@@ -143,11 +230,13 @@ app.use((req, res, next) => {
   const currentClubAdminClub =
     clubs.find(c => c.id === currentClubAdminClubId) || null;
 
+  // Make these variables available in all EJS templates
   res.locals.clubs = clubs;
   res.locals.categories = allCategories;
   res.locals.isClubAdmin = !!req.session.isClubAdmin;
   res.locals.currentClubAdminClub = currentClubAdminClub;
 
+  // Handle flash messages (show once then delete)
   if (req.session.flash) {
     res.locals.flash = req.session.flash;
     delete req.session.flash;
@@ -157,6 +246,13 @@ app.use((req, res, next) => {
   next();
 });
 
+/**
+ * Public Route: Home Page
+ * -----------------------
+ * Displays the list of all activities.
+ * Can be filtered by category (Robotique, IA, etc.) via query parameter ?category=...
+ * It sorts activities: by date if available, otherwise by title.
+ */
 app.get('/', (req, res) => {
   const data = loadData();
   const selectedCategory = req.query.category || '';
@@ -180,6 +276,13 @@ app.get('/', (req, res) => {
   });
 });
 
+/**
+ * Public Route: Activity Details
+ * ------------------------------
+ * Shows the full details of a specific activity.
+ * Also lists the participants (students) who have already registered for it.
+ * This page includes the registration form for new students.
+ */
 app.get('/activities/:id', (req, res) => {
   const data = loadData();
   const activity = data.activities.find(a => a.id === req.params.id);
@@ -332,6 +435,13 @@ app.post('/clubs/join', (req, res) => {
   res.redirect('/');
 });
 
+/**
+ * Club Authentication Page (Public)
+ * ---------------------------------
+ * Displays the login/register forms for a student to access the "Club Space".
+ * Note: This is DIFFERENT from the Club Admin login. 
+ * This is for regular members to access their club's private area.
+ */
 app.get('/auth-club', (req, res) => {
   const data = loadData();
   const clubs = (data.clubs || [])
@@ -476,6 +586,13 @@ app.post('/auth-club/register', (req, res) => {
   res.redirect('/club-espace');
 });
 
+/**
+ * Club Space (Protected)
+ * ----------------------
+ * Accessible only after successful club login (via /auth-club).
+ * Shows activities specific to that club and the list of members.
+ * Checks `req.session.authClubId` to verify the user is logged in.
+ */
 app.get('/club-espace', (req, res) => {
   const data = loadData();
   const clubId = req.session.authClubId;
@@ -514,6 +631,12 @@ app.get('/club-espace', (req, res) => {
   });
 });
 
+/**
+ * Admin Setup Route
+ * -----------------
+ * Special route used to create the FIRST admin account if none exist.
+ * This prevents the system from being locked out if the data file is empty.
+ */
 app.get('/admin/setup', (req, res) => {
   const data = loadData();
   const admins = data.admins || [];
@@ -586,10 +709,18 @@ app.post('/admin/setup', (req, res) => {
   res.redirect('/admin');
 });
 
+/**
+ * Admin Login Page (GET)
+ * ----------------------
+ * Displays the login form for the global administrator.
+ * If the user is already logged in (req.session.isAdmin), redirects them to the dashboard immediately.
+ * If no admins exist in the system, redirects to /admin/setup.
+ */
 app.get('/admin/login', (req, res) => {
   const data = loadData();
   const admins = data.admins || [];
 
+  // If no admins exist, force setup
   if (admins.length === 0) {
     return res.redirect('/admin/setup');
   }
@@ -601,6 +732,8 @@ app.get('/admin/login', (req, res) => {
   res.render('admin/login', { pageTitle: 'Connexion admin', error: null });
 });
 
+// Admin Login Logic (POST)
+// Verifies credentials and sets session flags
 app.post('/admin/login', (req, res) => {
   const { username, password } = req.body;
   const trimmedUsername = username ? username.trim() : '';
@@ -618,6 +751,7 @@ app.post('/admin/login', (req, res) => {
     });
   }
 
+  // Set session flags on successful login
   req.session.isAdmin = true;
   req.session.adminId = admin.id;
   const redirectTo = req.session.returnTo || '/admin';
@@ -633,6 +767,13 @@ app.post('/admin/logout', (req, res) => {
   res.redirect('/');
 });
 
+/**
+ * Admin Dashboard
+ * ---------------
+ * The main control panel for the global administrator.
+ * Protected by `requireAdmin` middleware.
+ * Gathers and displays overall statistics (counts of activities, students, etc.).
+ */
 app.get('/admin', requireAdmin, (req, res) => {
   const data = loadData();
   const stats = {
@@ -729,6 +870,12 @@ app.post('/admin/activities/:id/delete', requireAdmin, (req, res) => {
   res.redirect('/admin/activities');
 });
 
+/**
+ * Admin: Student Management
+ * -------------------------
+ * Lists all registered students.
+ * Also shows which clubs they belong to by cross-referencing `clubMemberships`.
+ */
 app.get('/admin/students', requireAdmin, (req, res) => {
   const data = loadData();
   const memberships = data.clubMemberships || [];
@@ -842,6 +989,12 @@ app.get('/admin/registrations', requireAdmin, (req, res) => {
   });
 });
 
+/**
+ * Admin: Club Management
+ * ----------------------
+ * Lists all clubs in the system.
+ * Calculates dynamic stats for each club (number of members, number of activities).
+ */
 app.get('/admin/clubs', requireAdmin, (req, res) => {
   const data = loadData();
   const clubs = (data.clubs || []).map(club => {
@@ -1060,6 +1213,13 @@ app.post('/admin/club-memberships/:id/delete', requireAdmin, (req, res) => {
   res.redirect('/admin/club-memberships');
 });
 
+/**
+ * Club Admin Login
+ * ----------------
+ * Login page specifically for a Club Administrator.
+ * Each club can have one or more assigned admins.
+ * This route is accessed typically via /clubs/:id/admin/login.
+ */
 app.get('/clubs/:id/admin/login', (req, res) => {
   const data = loadData();
   const clubId = req.params.id;
@@ -1126,6 +1286,13 @@ app.post('/clubs/:id/admin/login', (req, res) => {
   res.redirect('/club-admin');
 });
 
+/**
+ * Club Admin Dashboard
+ * --------------------
+ * The dedicated dashboard for a logged-in Club Admin.
+ * Protected by `requireClubAdmin` middleware.
+ * Shows ONLY the activities and members related to THEIR club.
+ */
 app.get('/club-admin', requireClubAdmin, (req, res) => {
   const data = loadData();
   const clubId = req.session.clubAdminClubId;
